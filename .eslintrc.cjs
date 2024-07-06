@@ -1,13 +1,23 @@
+const { resolve } = require('node:path');
+
+const project = resolve(__dirname, 'tsconfig.app.json');
+
 module.exports = {
   root: true,
   env: { browser: true, es2020: true },
   extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
+    require.resolve('@vercel/style-guide/eslint/node'),
+    require.resolve('@vercel/style-guide/eslint/typescript'),
+    require.resolve('@vercel/style-guide/eslint/browser'),
+    require.resolve('@vercel/style-guide/eslint/react'),
+    'plugin:prettier/recommended',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parser: '@typescript-eslint/parser',
+  ignorePatterns: [
+    'dist',
+    '.eslintrc.cjs',
+    'pocketbase-types.ts',
+    'vite.config.ts',
+  ],
   plugins: ['react-refresh'],
   rules: {
     'react-refresh/only-export-components': [
@@ -15,4 +25,22 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
-}
+  overrides: [
+    {
+      files: ['*.config.js', '*.config.ts', '*.config.mjs', '*.config.cjs'],
+      rules: {
+        'import/no-default-export': 'off',
+      },
+    },
+  ],
+  parserOptions: {
+    project,
+  },
+  settings: {
+    'import/resolver': {
+      typescript: {
+        project,
+      },
+    },
+  },
+};

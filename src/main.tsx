@@ -1,19 +1,19 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import './globals.css'
+import { createRoot } from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { StrictMode } from 'react';
+import { App } from './app.tsx';
+import './globals.css';
 
 const queryClient = new QueryClient();
 
-const root = document.getElementById("root");
+const root = document.getElementById('root');
 
-if (!root) throw Error("root element not exist");
+if (!root) throw Error('root element not exist');
 
-ReactDOM.createRoot(root).render(
-  <React.StrictMode>
+createRoot(root).render(
+  <StrictMode>
     <QueryClientProvider client={queryClient}>
       <App />
     </QueryClientProvider>
-  </React.StrictMode>
+  </StrictMode>,
 );
