@@ -17,6 +17,7 @@ module.exports = {
     '.eslintrc.cjs',
     'pocketbase-types.ts',
     'vite.config.ts',
+    'routeTree.gen.ts',
   ],
   plugins: ['react-refresh'],
   rules: {
