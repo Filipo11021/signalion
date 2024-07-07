@@ -12,6 +12,7 @@ module.exports = {
     require.resolve('@vercel/style-guide/eslint/react'),
     'plugin:prettier/recommended',
     'plugin:@tanstack/eslint-plugin-query/recommended',
+    'plugin:tailwindcss/recommended',
   ],
   ignorePatterns: [
     'dist',

@@ -56,7 +56,7 @@ function Chat(): ReactNode {
   }
 
   return (
-    <div className="h-dvh bg-slate-900 text-white flex flex-col justify-end">
+    <div className="flex h-dvh flex-col justify-end bg-slate-900 text-white">
       <div className="flex flex-col gap-2 overflow-y-scroll p-4">
         {data?.map(({ content, id, user: userId }) => (
           <div
@@ -73,7 +73,7 @@ function Chat(): ReactNode {
       ) : null}
       <form className="px-4" ref={formRef} onSubmit={handleSubmit}>
         <input
-          className="bg-slate-400 w-full py-2 px-6 rounded-md text-black"
+          className="w-full rounded-md bg-slate-400 px-6 py-2 text-black"
           type="text"
           required
           minLength={1}
