@@ -1,7 +1,7 @@
 import { createFileRoute, Navigate, Outlet } from '@tanstack/react-router';
 import { type ReactNode } from 'react';
-import { AuthLayout } from '@/auth/auth-layout';
-import { Protected } from '@/auth/protected';
+import { AuthLayout } from '@/modules/auth/auth-layout';
+import { Protected } from '@/modules/auth/protected';
 
 export const Route = createFileRoute('/auth')({
   component: Page,

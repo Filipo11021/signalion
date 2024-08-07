@@ -5,15 +5,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
-import { Button } from '@/ui/button';
-import { Input } from '@/ui/input';
+import { formatFormErrors } from '@/modules/format-form-error';
+import { Button } from '@/modules/ui/button';
+import { Input } from '@/modules/ui/input';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/ui/card';
+} from '@/modules/ui/card';
 import {
   Form,
   FormControl,
@@ -21,10 +22,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/ui/form';
-import { pb } from '@/pocketbase';
-import { Alert, AlertTitle } from '@/ui/alert';
-import { formatFormErrors } from '@/format-form-error';
+} from '@/modules/ui/form';
+import { Alert, AlertTitle } from '@/modules/ui/alert';
+import { pb } from '@/modules/pocketbase/pocketbase';
 
 const formSchema = z.object({
   username: z.string().min(1),
@@ -33,23 +33,17 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>;
 
-async function signUpMutationFn({
+async function signInMutationFn({
   password,
   username,
 }: {
   username: string;
   password: string;
 }): Promise<void> {
-  await pb.collection('users').create({
-    username,
-    password,
-    passwordConfirm: password,
-  });
-
   await pb.collection('users').authWithPassword(username, password);
 }
 
-export function SignUpView(): ReactNode {
+export function SignInView(): ReactNode {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -59,7 +53,7 @@ export function SignUpView(): ReactNode {
   });
 
   const mutation = useMutation({
-    mutationFn: signUpMutationFn,
+    mutationFn: signInMutationFn,
     onError: (mutationError) => {
       formatFormErrors({
         error: mutationError,
@@ -69,16 +63,16 @@ export function SignUpView(): ReactNode {
     },
   });
 
-  function handleSubmit(values: z.infer<typeof formSchema>): void {
+  function handleSubmit(values: FormSchema): void {
     mutation.mutate(values);
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-xl">Sign Up</CardTitle>
+        <CardTitle className="text-xl">Sign In</CardTitle>
         <CardDescription>
-          Enter your information to create an account
+          Enter your credentials below to sign in
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -121,13 +115,13 @@ export function SignUpView(): ReactNode {
               {mutation.isPending ? (
                 <Loader2Icon className="mr-2 size-4 animate-spin" />
               ) : null}
-              Create an account
+              Log In
             </Button>
 
             <div className="mt-4 text-center text-sm">
-              Already have an account?{' '}
-              <Link to="/auth/signin" className="underline">
-                Sign in
+              Don&apos;t have an account?{' '}
+              <Link to="/auth/signup" className="underline">
+                Sign up
               </Link>
             </div>
 

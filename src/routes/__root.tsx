@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { UserProvider } from '@/auth/use-user';
+import { UserProvider } from '@/modules/auth/use-user';
 
 const queryClient = new QueryClient({
   defaultOptions: {

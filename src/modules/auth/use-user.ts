@@ -4,7 +4,7 @@ import {
   type UseQueryResult,
 } from '@tanstack/react-query';
 import { type ReactNode, useEffect } from 'react';
-import { pb } from '@/pocketbase';
+import { pb } from '@/modules/pocketbase/pocketbase';
 
 interface User {
   id: string;

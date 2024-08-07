@@ -1,6 +1,6 @@
 import { createFileRoute, Navigate } from '@tanstack/react-router';
 import { type ReactNode } from 'react';
-import { Protected } from '@/auth/protected';
+import { Protected } from '@/modules/auth/protected';
 
 function RedirectToAuth(): ReactNode {
   return <Navigate to="/auth/signup" />;

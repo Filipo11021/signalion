@@ -8,9 +8,9 @@ import {
 import { type FormEvent, useEffect, useRef } from 'react';
 import { type ReactNode } from '@tanstack/react-router';
 import { SendIcon } from 'lucide-react';
-import { pb } from '@/pocketbase';
-import { type MessagesResponse } from '@/pocketbase-types';
-import { useUser } from '@/auth/use-user';
+import { pb } from '@/modules/pocketbase/pocketbase';
+import { type MessagesResponse } from '@/modules/pocketbase/pocketbase-types';
+import { useUser } from '@/modules/auth/use-user';
 
 const messagesQueryOptions = queryOptions({
   queryKey: ['messages'],

@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { createFileRoute, Navigate, Outlet } from '@tanstack/react-router';
-import { Protected } from '@/auth/protected';
+import { Protected } from '@/modules/auth/protected';
 
 export const Route = createFileRoute('/app')({
   component: Page,
