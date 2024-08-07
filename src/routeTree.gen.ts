@@ -12,7 +12,10 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthImport } from './routes/auth'
+import { Route as AppImport } from './routes/app'
 import { Route as IndexImport } from './routes/index'
+import { Route as AuthIndexImport } from './routes/auth/index'
+import { Route as AppIndexImport } from './routes/app/index'
 import { Route as AuthSignupImport } from './routes/auth/signup'
 import { Route as AuthSigninImport } from './routes/auth/signin'
 
@@ -23,9 +26,24 @@ const AuthRoute = AuthImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AppRoute = AppImport.update({
+  path: '/app',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AuthIndexRoute = AuthIndexImport.update({
+  path: '/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AppIndexRoute = AppIndexImport.update({
+  path: '/',
+  getParentRoute: () => AppRoute,
 } as any)
 
 const AuthSignupRoute = AuthSignupImport.update({
@@ -49,6 +67,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppImport
+      parentRoute: typeof rootRoute
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -70,6 +95,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupImport
       parentRoute: typeof AuthImport
     }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof AppImport
+    }
+    '/auth/': {
+      id: '/auth/'
+      path: '/'
+      fullPath: '/auth/'
+      preLoaderRoute: typeof AuthIndexImport
+      parentRoute: typeof AuthImport
+    }
   }
 }
 
@@ -77,7 +116,12 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  AuthRoute: AuthRoute.addChildren({ AuthSigninRoute, AuthSignupRoute }),
+  AppRoute: AppRoute.addChildren({ AppIndexRoute }),
+  AuthRoute: AuthRoute.addChildren({
+    AuthSigninRoute,
+    AuthSignupRoute,
+    AuthIndexRoute,
+  }),
 })
 
 /* prettier-ignore-end */
@@ -89,17 +133,25 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/app",
         "/auth"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/app": {
+      "filePath": "app.tsx",
+      "children": [
+        "/app/"
+      ]
+    },
     "/auth": {
       "filePath": "auth.tsx",
       "children": [
         "/auth/signin",
-        "/auth/signup"
+        "/auth/signup",
+        "/auth/"
       ]
     },
     "/auth/signin": {
@@ -108,6 +160,14 @@ export const routeTree = rootRoute.addChildren({
     },
     "/auth/signup": {
       "filePath": "auth/signup.tsx",
+      "parent": "/auth"
+    },
+    "/app/": {
+      "filePath": "app/index.tsx",
+      "parent": "/app"
+    },
+    "/auth/": {
+      "filePath": "auth/index.tsx",
       "parent": "/auth"
     }
   }
