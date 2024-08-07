@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import { ClientResponseError } from 'pocketbase';
+import { Link } from '@tanstack/react-router';
 import { Button } from '@/ui/button';
 import { Input } from '@/ui/input';
 import {
@@ -23,24 +23,17 @@ import {
   FormMessage,
 } from '@/ui/form';
 import { pb } from '@/pocketbase';
+import { Alert, AlertTitle } from '@/ui/alert';
+import { formatFormErrors } from '@/format-form-error';
 
 const formSchema = z.object({
   username: z.string().min(1),
   password: z.string().min(6),
 });
 
-const errorSchema = z.object({
-  data: z
-    .object({
-      username: z.object({ message: z.string() }),
-      password: z.object({ message: z.string() }),
-    })
-    .partial(),
-});
-
 type FormSchema = z.infer<typeof formSchema>;
 
-async function signInMutationFn({
+async function signUpMutationFn({
   password,
   username,
 }: {
@@ -66,18 +59,13 @@ export function SignUpView(): ReactNode {
   });
 
   const mutation = useMutation({
-    mutationFn: signInMutationFn,
-    onError: (error) => {
-      if (error instanceof ClientResponseError) {
-        Object.entries(errorSchema.parse(error.data).data).forEach(
-          ([key, value]) => {
-            form.setError(
-              key === 'username' || key === 'password' ? key : 'root',
-              { message: value.message },
-            );
-          },
-        );
-      }
+    mutationFn: signUpMutationFn,
+    onError: (mutationError) => {
+      formatFormErrors({
+        error: mutationError,
+        setFormError: form.setError,
+        fields: ['password', 'username'],
+      });
     },
   });
 
@@ -96,7 +84,6 @@ export function SignUpView(): ReactNode {
       <CardContent>
         <Form {...form}>
           <form
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises -- form submit
             onSubmit={form.handleSubmit(handleSubmit)}
             className="grid gap-4"
           >
@@ -136,6 +123,19 @@ export function SignUpView(): ReactNode {
               ) : null}
               Create an account
             </Button>
+
+            <div className="mt-4 text-center text-sm">
+              Already have an account?{' '}
+              <Link to="/auth/signin" className="underline">
+                Sign in
+              </Link>
+            </div>
+
+            {form.formState.errors.root ? (
+              <Alert variant="destructive">
+                <AlertTitle>{form.formState.errors.root.message}</AlertTitle>
+              </Alert>
+            ) : null}
           </form>
         </Form>
       </CardContent>
